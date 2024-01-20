@@ -15,7 +15,7 @@ app.use(express.urlencoded({extended: false}))
 app.get('/', (req, res)=>{
   res.send('Hello There')
 })
-app.get('/api/serviceRoute',serviceRoute)
+app.use('/api/services',serviceRoute)
 
 
 // Start the server
