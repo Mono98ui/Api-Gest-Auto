@@ -3,6 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
 var cors = require('cors')
+var serviceRoute = require('./routes/serviceRoute')
 
 const MONGO_DB = process.env.MONGO_URL
 const PORT = process.env.PORT
@@ -14,6 +15,7 @@ app.use(express.urlencoded({extended: false}))
 app.get('/', (req, res)=>{
   res.send('Hello There')
 })
+app.get('/api/serviceRoute',serviceRoute)
 
 
 // Start the server
