@@ -19,7 +19,7 @@ const createServices = async(req, res) =>{
 	  		time_service:listServices[i].time_service,
 	  		cost:listServices[i].cost})
 	  	if(serviceFound){
-	  		res.status(404).json({message:"Services is already existed"})
+	  		res.status(404).json({message:"Services already existed"})
 	  	}
 		} 
 		const services = service.create(listServices)
