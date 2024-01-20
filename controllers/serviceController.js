@@ -22,7 +22,7 @@ const createServices = async(req, res) =>{
 	  		res.status(404).json({message:"Services already existed"})
 	  	}
 		} 
-		const services = service.create(listServices)
+		const services = await service.create(listServices)
 		res.status(200).json({message:"Services is created", services: listServices})
 
 	}catch(err){
