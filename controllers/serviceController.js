@@ -19,14 +19,14 @@ const createServices = async(req, res) =>{
 	  		time_service:listServices[i].time_service,
 	  		cost:listServices[i].cost})
 	  	if(serviceFound){
-	  		res.status(404).json({message:"Services already existed"})
+	  		return res.status(404).json({message:"Services already existed"})
 	  	}
 		} 
 		const services = await service.create(listServices)
-		res.status(200).json({message:"Services is created", services: listServices})
+		return res.status(200).json({message:"Services is created", services: listServices})
 
 	}catch(err){
-		res.status(500).json({error: err.message})
+		return res.status(500).json({error: err.message})
 	}
 }
 module.exports = {getServices, createServices}
