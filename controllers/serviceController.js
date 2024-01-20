@@ -4,10 +4,10 @@ const asyncHandler = require('express-async-handler')
 const getServices = async(req, res) =>{
 	try{
 		const services = await service.find({})
-		res.status(200).json(services)
+		return res.status(200).json(services)
 
 	}catch(err){
-		res.status(500).json({error: err.message})
+		return res.status(500).json({error: err.message})
 	}
 }
 
