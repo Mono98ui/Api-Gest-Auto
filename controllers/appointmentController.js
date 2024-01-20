@@ -39,6 +39,7 @@ const createAppointments = async(req, res) =>{
 			}
 		}
 		const newappointments = await appointment.create(newListAppointment)
+		fs.unlinkSync(`./upload/${req.file.filename}`)
 		res.status(200).json({message:"Appointments is created", appointement: newappointments})
 
 
