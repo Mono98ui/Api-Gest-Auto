@@ -4,6 +4,7 @@ const fs = require('fs')
 const nbrAttr = 3
 
 const getAppointments = async(req, res) =>{
+	//const dateNoGreater = req.query.dateBefore
 	try{
 		const appointments = await appointment.find({})
 		return res.status(200).json(appointments)

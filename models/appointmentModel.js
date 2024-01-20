@@ -11,6 +11,11 @@ const appointmentSchema = new mongoose.Schema({
   vehicule_type:{
     type: String,
     required: true,
+  },
+  isRejected:{
+    type:Boolean,
+    require:false,
+    default:false
   }
 })
 module.exports = mongoose.model('Appointment', appointmentSchema);
