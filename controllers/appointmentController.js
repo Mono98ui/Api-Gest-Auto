@@ -108,6 +108,8 @@ const rejectAppointment = async(appointments) =>{
 				var borneInferior = memoriseChosenApp[memoriseChosenApp.length -1].time_appointment
 				if(borneSuperior >= chunkedArrays[i][j][k].time_appointment && borneInferior <= chunkedArrays[i][j][k].time_appointment ){
 					chunkedArrays[i][j][k].isRejected = true
+				}else if(chunkedArrays[i][j][k].time_appointment.getMonth() >= 10 && chunkedArrays[i][j][k].time_appointment.getMonth()<=11 && (chunkedArrays[i][j][k].time_appointment.getHours() >= 7 && chunkedArrays[i][j][k].time_appointment.getMinutes()>=0 && chunkedArrays[i][j][k].time_appointment.getSeconds() >=0) && chunkedArrays[i][j][k].time_appointment.getHours() < 19 ){
+					chunkedArrays[i][j][k].isRejected = true
 				}else{
 					memoriseChosenApp.push(chunkedArrays[i][j][k])
 				}
