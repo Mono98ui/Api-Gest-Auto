@@ -47,9 +47,8 @@ function splitArrayByDay(array) {
   const result = [];
   let currentDay = null;
   let currentChunk = [];
-
   array.forEach(item => {
-    const itemDate = item.time_appointment
+    const itemDate = new Date(item.time_appointment)
     const dateToCompare = new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate());
 
     // Check if the day has changed
@@ -87,6 +86,7 @@ const rejectAppointment = async(appointments) =>{
 		}
 	}
 	const memoriseChosenApp = []
+	const listOfApp = []
 	const carsType = new Map([
   ["compact", 30],
   ["class 2 truck", 120],
@@ -102,30 +102,39 @@ const rejectAppointment = async(appointments) =>{
 
 				if(memoriseChosenApp.length == 0){
 					memoriseChosenApp.push(chunkedArrays[i][j][k])
+					listOfApp.push(chunkedArrays[i][j][k])
 					continue
 				}
-				var borneSuperior = moment(memoriseChosenApp[memoriseChosenApp.length -1].time_appointment).add(carsType.get(chunkedArrays[i][j][k].vehicule_type), 'm').toDate();
-				var borneInferior = memoriseChosenApp[memoriseChosenApp.length -1].time_appointment
+				var borneSuperior = moment(new Date(memoriseChosenApp[memoriseChosenApp.length -1].time_appointment)).add(carsType.get(chunkedArrays[i][j][k].vehicule_type), 'm').toDate();
+				var borneInferior = new Date(memoriseChosenApp[memoriseChosenApp.length -1].time_appointment)
+				var currentDate = new Date(chunkedArrays[i][j][k].time_appointment)
+
 				if(borneSuperior >= chunkedArrays[i][j][k].time_appointment && borneInferior <= chunkedArrays[i][j][k].time_appointment ){
+
 					chunkedArrays[i][j][k].isRejected = true
-				}else if(chunkedArrays[i][j][k].time_appointment.getMonth() >= 10 && chunkedArrays[i][j][k].time_appointment.getMonth()<=11 && (chunkedArrays[i][j][k].time_appointment.getHours() >= 7 && chunkedArrays[i][j][k].time_appointment.getMinutes()>=0 && chunkedArrays[i][j][k].time_appointment.getSeconds() >=0) && chunkedArrays[i][j][k].time_appointment.getHours() < 19 ){
+
+				}else if(currentDate.getMonth() >= 10 && currentDate.getMonth()<=11 && (currentDate.getHours() >= 7 && currentDate.getMinutes()>=0 && currentDate.getSeconds() >=0) && currentDate.getHours() < 19 ){
+
 					chunkedArrays[i][j][k].isRejected = true
+
 				}else{
+
 					memoriseChosenApp.push(chunkedArrays[i][j][k])
+
 				}
+				listOfApp.push(chunkedArrays[i][j][k])
 			}
 		}
 	}
 
 
-	return chunkedArrays
+	return listOfApp
 }
 
 const getAppointments = async(req, res) =>{
 	try{
 		const appointments = await appointment.find({})
-		const newAppointment= await rejectAppointment(appointments)
-		return res.status(200).json(newAppointment)
+		return res.status(200).json(appointments)
 
 	}catch(err){
 		return res.status(500).json({error: err.message})
@@ -148,7 +157,8 @@ const createAppointments = async(req, res) =>{
 			  vehicule_type:appoint[2]})
 			}
 		}
-		const newappointments = await appointment.create(newListAppointment)
+		const newAppointment= await rejectAppointment(newListAppointment)
+		const newappointments = await appointment.create(newAppointment)
 		fs.unlinkSync(`./upload/${req.file.filename}`)
 		return res.status(200).json({message:"Appointments is created", appointement: newappointments})
 
