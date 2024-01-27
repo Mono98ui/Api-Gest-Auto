@@ -64,7 +64,7 @@ function splitArrayByDay(array) {
       result.push(currentChunk);
       currentChunk = [item];
       currentDay = dateToCompare;
-      
+
     }
   });
 
@@ -96,6 +96,8 @@ const rejectAppointment = async(appointments) =>{
 
 	const memoriseChosenApp = []
 	const listOfApp = []
+
+	//client must send to api a list of service
 	const carsType = new Map([
   ["compact", 30],
   ["class 2 truck", 120],
