@@ -85,7 +85,7 @@ function findCarType(arrayServices, carType){
 }
 const rejectAppointment = async(appointments, services) =>{
 
-	const chunkedArrays = splitArrayByVehiculeType(appointments, 5);
+	const chunkedArrays = splitArrayByVehiculeType(appointments);
 
 	for(let i = 0; i < chunkedArrays.length; i++){
 		chunkedArrays[i] = chunkedArrays[i].sort(sortByTimeApp)
