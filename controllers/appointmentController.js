@@ -76,7 +76,14 @@ function splitArrayByDay(array) {
   return result;
 }
 
-const rejectAppointment = async(appointments) =>{
+function findCarType(arrayServices, carType){
+	for(let i = 0; i < arrayServices.length; i++){
+		if(arrayServices[i].type_car == carType){
+			return arrayServices[i]
+		}
+	}
+}
+const rejectAppointment = async(appointments, services) =>{
 
 	const chunkedArrays = splitArrayByVehiculeType(appointments, 5);
 
@@ -97,14 +104,6 @@ const rejectAppointment = async(appointments) =>{
 	const memoriseChosenApp = []
 	const listOfApp = []
 
-	//client must send to api a list of service
-	const carsType = new Map([
-  ["compact", 30],
-  ["class 2 truck", 120],
-  ["full-size", 30],
-  ["medium", 30],
-  ["class 1 truck", 60]
-]);
 
 	for(let i = 0; i < chunkedArrays.length; i++){
 		for(let j = 0; j < chunkedArrays[i].length; j++){
@@ -117,7 +116,7 @@ const rejectAppointment = async(appointments) =>{
 					continue
 				}
 
-				var borneSuperior = moment(new Date(memoriseChosenApp[memoriseChosenApp.length -1].time_appointment)).add(carsType.get(chunkedArrays[i][j][k].vehicule_type), 'm').toDate();
+				var borneSuperior = moment(new Date(memoriseChosenApp[memoriseChosenApp.length -1].time_appointment)).add(findCarType(services, chunkedArrays[i][j][k].vehicule_type).time_service, 'm').toDate();
 				var borneInferior = new Date(memoriseChosenApp[memoriseChosenApp.length -1].time_appointment)
 				var currentDate = new Date(chunkedArrays[i][j][k].time_appointment)
 
@@ -169,7 +168,8 @@ const createAppointments = async(req, res) =>{
 			  vehicule_type:appoint[2]})
 			}
 		}
-		const newAppointment= await rejectAppointment(newListAppointment)
+		const services = await service.find({})
+		const newAppointment= await rejectAppointment(newListAppointment, services)
 		const newappointments = await appointment.create(newAppointment)
 		fs.unlinkSync(`./upload/${req.file.filename}`)
 		return res.status(200).json({message:"Appointments is created", appointement: newappointments})
