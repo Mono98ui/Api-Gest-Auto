@@ -26,20 +26,15 @@ const  sortByTimeCreation= (a, b)=>{
 }
 
 function splitArrayByVehiculeType(array) {
-  const result = [[],[],[],[],[]];
+	const resultMap = new Map()
   for (let i = 0; i < array.length; i ++) {
-    if(array[i].vehicule_type==="compact"){
-    	result[0].push(array[i])
-    }else if(array[i].vehicule_type==="class 2 truck"){
-    	result[1].push(array[i])
-    }else if(array[i].vehicule_type==="full-size"){
-    	result[2].push(array[i])
-    }else if(array[i].vehicule_type==="medium"){
-    	result[3].push(array[i])
-    }else if(array[i].vehicule_type==="class 1 truck"){
-    	result[4].push(array[i])
+    if(typeof resultMap.get(array[i].vehicule_type) === 'undefined'){
+    	resultMap.set(array[i].vehicule_type,[array[i]])
+    }else{
+    	resultMap.get(array[i].vehicule_type).push(array[i])
     }
   }
+  const result = Array.from(resultMap, ([name, value]) => (value));
   return result;
 }
 
