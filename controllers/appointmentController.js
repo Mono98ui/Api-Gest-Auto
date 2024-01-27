@@ -115,11 +115,12 @@ const rejectAppointment = async(appointments, services) =>{
 				var borneInferior = new Date(memoriseChosenApp[memoriseChosenApp.length -1].time_appointment)
 				var currentDate = new Date(chunkedArrays[i][j][k].time_appointment)
 
-				if(borneSuperior >= chunkedArrays[i][j][k].time_appointment && borneInferior <= chunkedArrays[i][j][k].time_appointment ){
+				if(borneSuperior >= currentDate && borneInferior <= currentDate){
 
 					chunkedArrays[i][j][k].isRejected = true
 
-				}else if(currentDate.getMonth() >= 10 && currentDate.getMonth()<=11 && (currentDate.getHours() >= 7 && currentDate.getMinutes()>=0 && currentDate.getSeconds() >=0) && currentDate.getHours() < 19 ){
+				}else if((borneSuperior.getMonth() < 10 || borneSuperior.getMonth()>11) && (borneSuperior.getHours() < 7 || (borneSuperior.getHours() >= 19 &&
+					 borneSuperior.getMinutes()> 0 && borneSuperior.getSeconds() > 0) ) ){
 
 					chunkedArrays[i][j][k].isRejected = true
 
