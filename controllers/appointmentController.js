@@ -25,7 +25,7 @@ const  sortByTimeCreation= (a, b)=>{
   return 0;
 }
 
-function splitArray(array) {
+function splitArrayByVehiculeType(array) {
   const result = [[],[],[],[],[]];
   for (let i = 0; i < array.length; i ++) {
     if(array[i].vehicule_type==="compact"){
@@ -44,6 +44,7 @@ function splitArray(array) {
 }
 
 function splitArrayByDay(array) {
+
   const result = [];
   let currentDay = null;
   let currentChunk = [];
@@ -54,12 +55,16 @@ function splitArrayByDay(array) {
     // Check if the day has changed
     if (currentDay === null || (dateToCompare.getFullYear() === currentDay.getFullYear() && dateToCompare.getMonth() === currentDay.getMonth() &&
     	dateToCompare.getDate() === currentDay.getDate())) {
+
       currentChunk.push(item);
       currentDay = dateToCompare;
+
     } else {
+
       result.push(currentChunk);
       currentChunk = [item];
       currentDay = dateToCompare;
+      
     }
   });
 
@@ -73,18 +78,22 @@ function splitArrayByDay(array) {
 
 const rejectAppointment = async(appointments) =>{
 
-	const chunkedArrays = splitArray(appointments, 5);
+	const chunkedArrays = splitArrayByVehiculeType(appointments, 5);
+
 	for(let i = 0; i < chunkedArrays.length; i++){
 		chunkedArrays[i] = chunkedArrays[i].sort(sortByTimeApp)
 	}
+
 	for(let i = 0; i < chunkedArrays.length; i++){
 		chunkedArrays[i] = splitArrayByDay(chunkedArrays[i])
 	}
+
 	for(let i = 0; i < chunkedArrays.length; i++){
 		for(let j = 0; j < chunkedArrays[i].length; j++){
 			chunkedArrays[i][j] = chunkedArrays[i][j].sort(sortByTimeCreation)
 		}
 	}
+
 	const memoriseChosenApp = []
 	const listOfApp = []
 	const carsType = new Map([
@@ -105,6 +114,7 @@ const rejectAppointment = async(appointments) =>{
 					listOfApp.push(chunkedArrays[i][j][k])
 					continue
 				}
+
 				var borneSuperior = moment(new Date(memoriseChosenApp[memoriseChosenApp.length -1].time_appointment)).add(carsType.get(chunkedArrays[i][j][k].vehicule_type), 'm').toDate();
 				var borneInferior = new Date(memoriseChosenApp[memoriseChosenApp.length -1].time_appointment)
 				var currentDate = new Date(chunkedArrays[i][j][k].time_appointment)
